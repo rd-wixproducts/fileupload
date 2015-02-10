@@ -12,13 +12,68 @@
 
 // Scaffolding
 // -------------------------
+$sidebar-width: 200px;
+$sidebar-section-height: 50px;
+.chatroom-container {
+  height: 100%;
+}
+
+.messages-container {
+  overflow-y: scroll;
+  height: 580px;
+}
+
+#new-message__submit {
+  width: 70px;
+}
+
+#message__input {
+  width: 80%;
+}
+
+.sidebar {
+  position: fixed;
+  top: $navbar-height;
+  left: 0;
+  height: calc(100% - #{$navbar-height});
+  width: $sidebar-width;
+  box-shadow: 0 1px 5px rgba(0,0,0,.15);
+
+  &__section {
+
+    a {
+      transition: color 0.5s ease;
+      color: black;
+    }
+    padding-left: 30px;
+    height: $sidebar-section-height;
+    box-shadow: 1px 0 5px rgba(0,0,0,.15);
+    line-height: $sidebar-section-height;
+    transition: background-color 0.5s ease;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $brand-primary;
+
+      a {
+        color: white;
+      }
+    }
+  }
+}
+
+.main-content {
+  margin-left: $sidebar-width;
+}
 
 html {
+  overflow: hidden;
   position: relative;
   min-height: 100%;
 }
 
 body {
+  overflow: hidden;
   padding-top: 60px;
   margin-bottom: 75px;
   -webkit-font-smoothing: antialiased;
@@ -62,4 +117,20 @@ footer {
 .fa,
 [class^="ion-"] {
   margin-right: 5px;
+}
+
+.chatroom-chat-title {
+  font-size: 24px;
+}
+
+.chatroom-chat-topic {
+  font-size: 20px;
+}
+
+p.good {
+  background-color: lightgreen;
+}
+
+p.bad {
+  background-color: pink;
 }

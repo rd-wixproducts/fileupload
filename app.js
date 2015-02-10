@@ -1,6 +1,8 @@
-/**
- * Module dependencies.
- */
+// load .env file
+var dotenv = require('dotenv');
+dotenv.load();
+
+// Module Dependencies
 var express = require('express');
 var cookieParser = require('cookie-parser');
 var compress = require('compression');
@@ -26,6 +28,7 @@ var connectAssets = require('connect-assets');
  */
 var homeController = require('./controllers/home');
 var userController = require('./controllers/user');
+var chatController = require('./controllers/chat');
 var apiController = require('./controllers/api');
 var contactController = require('./controllers/contact');
 
@@ -56,7 +59,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 app.use(compress());
 app.use(connectAssets({
-  paths: [path.join(__dirname, 'public/css'), path.join(__dirname, 'public/js')]
+  paths: [path.join(__dirname, 'public/css'),
+          path.join(__dirname, 'public/js')]
 }));
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -75,9 +79,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use(lusca({
-  csrf: true,
+  csrf: false,
   xframe: 'SAMEORIGIN',
-  xssProtection: true
+  xssProtection: false
 }));
 app.use(function(req, res, next) {
   res.locals.user = req.user;
@@ -184,6 +188,31 @@ app.get('/auth/tumblr/callback', passport.authorize('tumblr', { failureRedirect:
 app.get('/auth/venmo', passport.authorize('venmo', { scope: 'make_payments access_profile access_balance access_email access_phone' }));
 app.get('/auth/venmo/callback', passport.authorize('venmo', { failureRedirect: '/api' }), function(req, res) {
   res.redirect('/api/venmo');
+});
+
+/**
+ * SODIMM routes
+ */
+app.get('/user/:userId', userController.getUser);
+
+app.get('/chat',          chatController.getChatrooms);
+app.post('/chat',         chatController.createChatroom);
+app.get('/chat/:roomId',  chatController.getChatroom);
+app.post('/chat/:roomId', chatController.postMessage);
+app.get('/members/:roomId',  chatController.getMembers);
+app.get('/user/:userId/getFav', userController.getFav);
+app.get('/user/:userId/addFav/:channelId', userController.addFav);
+app.get('/user/:userId/deleteFav/:channelId', userController.deleteFav);
+//app.get('/testSentiment', chatController.testSentiment);
+
+
+/*
+ * react-router catch-all
+ */
+app.get('*', function(req, res){
+  res.render('home', {
+    title: req.params.roomId
+  });
 });
 
 /**

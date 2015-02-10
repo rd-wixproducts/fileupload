@@ -5,15 +5,14 @@ html
     meta(http-equiv='X-UA-Compatible', content='IE=edge')
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     meta(name='csrf-token', content=_csrf)
-    title #{title} - Hackathon Starter
+    title #{title} - Sodimm
     != css('main')
   body
     include partials/navbar
+    include partials/modal
 
-    .container
+    div
       include partials/flash
       block content
-
-    include partials/footer
 
     != js('application')
